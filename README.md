@@ -14,11 +14,11 @@ An end-to-end **Infrastructure as Code (IaC)** and **Configuration Management** 
 
 ## Table of Contents
 1. [Architecture and Workflow Overview](#1-architecture--workflow-overview)
-2. [DevOps and Security Best Practices Implemented](#2-devops--security-best-practices-implemented)
+2. [DevOps and Security Best Practices Implemented](#2-devops-and-security-best-practices-implemented)
 3. [Project Directory Structure](#3-project-directory-structure)
 4. [Prerequisites](#4-prerequisites)
 5. [Step-by-Step Usage Guide](#5-step-by-step-usage-guide)
-6. [Automated Cloud Teardown](#6-automated-cloud-teardown-zero-cost-cleanup)
+6. [Automated Cloud Teardown](#6-automated-cloud-teardown)
 
 
 ---
