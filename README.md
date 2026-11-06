@@ -14,16 +14,16 @@ An end-to-end **Infrastructure as Code (IaC)** and **Configuration Management** 
 
 ## Table of Contents
 1. [Architecture and Workflow Overview](#1-architecture--workflow-overview)
-2. [DevOps and Security Best Practices Implemented](#3-devops--security-best-practices-implemented)
-3. [Project Directory Structure](#4-project-directory-structure)
-4. [Prerequisites](#5-prerequisites)
-5. [Step-by-Step Usage Guide](#6-step-by-step-usage-guide)
-6. [Automated Cloud Teardown](#8-automated-cloud-teardown-zero-cost-cleanup)
+2. [DevOps and Security Best Practices Implemented](#2-devops--security-best-practices-implemented)
+3. [Project Directory Structure](#3-project-directory-structure)
+4. [Prerequisites](#4-prerequisites)
+5. [Step-by-Step Usage Guide](#5-step-by-step-usage-guide)
+6. [Automated Cloud Teardown](#6-automated-cloud-teardown-zero-cost-cleanup)
 
 
 ---
 
-## 1. Architecture & Workflow Overview
+## 1. Architecture and Workflow Overview
 
 
 ```text
@@ -60,7 +60,7 @@ An end-to-end **Infrastructure as Code (IaC)** and **Configuration Management** 
 
 ---
 
-## 2. DevOps & Security Best Practices Implemented
+## 2. DevOps and Security Best Practices Implemented
 
 * **Dynamic AMI Resolution (`data "aws_ami"`):** Avoids hardcoded AMI IDs by dynamically querying Canonical's official owner ID (`099720109477`) for the latest Ubuntu 24.04 HVM GP3 image on every deployment.
 * **Dynamic Inventory Handoff (`local_file` Resource):** Terraform automatically generates `ansible/inventory.ini` with the new EC2 instance's public IP address, eliminating manual copy-pasting when IP addresses change.
