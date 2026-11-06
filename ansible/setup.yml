@@ -1,0 +1,93 @@
+---
+- name: Harden Ubuntu Server and Deploy Docker Web Container
+  hosts: webservers
+  become: true
+
+  tasks:
+    # 1. Update APT and install required packages
+    - name: Update apt cache and install Docker and UFW firewall
+      ansible.builtin.apt:
+        name:
+          - ufw
+          - curl
+          - docker.io
+        state: present
+        update_cache: true
+
+    # 2. Configure non root user permissions for Docker
+    - name: Add ubuntu user to the docker group
+      ansible.builtin.user:
+        name: ubuntu
+        groups: docker
+        append: true
+
+    # 3. SSH Hardening - Disable Root Login and Password Login
+    - name: Disable root login over SSH
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+      notify: Restart SSH
+
+    - name: Disable password authentication over SSH
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+      notify: Restart SSH
+
+    # 4. Configure Host Firewall
+    - name: Allow SSH in UFW
+      community.general.ufw:
+        rule: allow
+        port: '22'
+        proto: tcp
+
+    - name: Allow HTTP in UFW
+      community.general.ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+    - name: Enable UFW firewall and deny all other incoming traffic
+      community.general.ufw:
+        state: enabled
+        policy: deny
+        direction: incoming
+
+    # 5. Start Docker and Deploy the Web Container
+    - name: Ensure Docker service is running and enabled on boot
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Create web directory on server
+      ansible.builtin.file:
+        path: /opt/webapp
+        state: directory
+        mode: '0755'
+
+    - name: Copy custom index.html to server
+      ansible.builtin.copy:
+        src: ./index.html
+        dest: /opt/webapp/index.html
+        mode: '0644'
+
+    - name: Run Nginx container serving the custom webpage on Port 80
+      community.docker.docker_container:
+        name: nginx-web
+        image: nginx:1.27-alpine
+        state: started
+        restart_policy: unless-stopped
+        ports:
+          - "80:80"
+        volumes:
+          - /opt/webapp/index.html:/usr/share/nginx/html/index.html:ro
+
+  handlers:
+    - name: Restart SSH
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+

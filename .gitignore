@@ -1,0 +1,16 @@
+cloud-key
+cloud-key.pub
+*.pem
+*.key
+
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+*.tfvars.json
+
+ansible/inventory.ini
+*.retry
+.DS_Store
+
